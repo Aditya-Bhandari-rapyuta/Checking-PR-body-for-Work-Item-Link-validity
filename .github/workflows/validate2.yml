@@ -10,8 +10,8 @@ on:
 jobs:
   check_url:
     env:
-      WRIKE_REGEX: "\\(https:\\|\\)//\\(www\\.\\|\\)wrike\\.com/open.htm?id=[0-9]+"
-      AZURE_REGEX: "AB#[0-9]+"
+      WRIKE_REGEX: "\\(https:\\|\\)//\\(www\\.\\|\\)wrike\\.com/open.htm?id=[[:digit:]]\\+"
+      AZURE_REGEX: "AB#[[:digit:]]\\+"
       AZURE_PAT: ${{ secrets.AZURE_PAT }}
       AZURE_ORG_URL: "https://dev.azure.com/rapyuta-robotics"  
       AZURE_PROJECT: "Oks" 
@@ -20,15 +20,15 @@ jobs:
     steps:
       - name: Check for Wrike or Azure link in PR body
         run: |
-          if ! echo "$PR_BODY" | grep -e "$WRIKE_REGEX" -e "$AZURE_REGEX" ; then
+          if ! echo "${{ env.PR_BODY }}" | grep -e "${{ env.WRIKE_REGEX }}" -e "${{ env.AZURE_REGEX }}" ; then
             echo "::error::Neither a Wrike link nor an Azure code found in the PR body. Please add a Wrike link or an Azure code (AB#<task_number>)."
             exit 1
           fi
           
-          AZURE_ID=$(echo "$PR_BODY" | grep -oE 'AZURE_REGEX' | cut -d'#' -f2)
+          AZURE_ID=$(echo "${{ env.PR_BODY }}" | grep -oE '${{ env.AZURE_REGEX }}' | cut -d'#' -f2)
 
-          API_URL="$AZURE_ORG_URL/$AZURE_PROJECT/_apis/wit/workitems/$AZURE_ID?api-version=7.1"
-          RESPONSE=$(curl -s -u ":$AZURE_PAT" "$API_URL")
+          API_URL="${{ env.AZURE_ORG_URL }}/${{ env.AZURE_PROJECT }}/_apis/wit/workitems/$AZURE_ID?api-version=7.1"
+          RESPONSE=$(curl -s -u ":${{ env.AZURE_PAT }}" "$API_URL")
 
           if echo "$RESPONSE" | jq -e .error > /dev/null; then
             echo "::error::Failed to fetch work item from Azure DevOps:"
