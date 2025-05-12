@@ -5,7 +5,7 @@ WRIKE_REGEX="\\(https:\\|\\)//\\(www\\.\\|\\)wrike\\.com/open.htm?id=[[:digit:]]
 AZURE_REGEX="AB#[[:digit:]]\\+"
 
 # Environment Variables (expected to be passed in or available in GitHub Actions)
-AZURE_PAT="FC3IF8Ubrg5PBXiFl4v2rjerfsPeq9KfJWQVDDZLbzuIw1ovEOoqJQQJ99BEACAAAAA1kgrNAAASAZDO3waD "
+AZURE_PAT="DLhJkVbbX7bBHxIm6UXqjs7GCWBTLvoQeqgYYpgiLnM8asXQSSUmJQQJ99BEACAAAAA1kgrNAAASAZDO4Xux"
 AZURE_ORG_URL="https://dev.azure.com/rapyuta-robotics"
 AZURE_PROJECT="Oks"
 PR_BODY="Link To Azure Work Item: AB#58921 General PR Checklist:"
@@ -23,8 +23,9 @@ echo "Azure ID: $AZURE_ID"
 
 # Only proceed if an Azure ID is found
 if [ -n "$AZURE_ID" ]; then
-  API_URL="${AZURE_ORG_URL}/${AZURE_PROJECT}/_apis/wit/workitems/$AZURE_ID?api-version=7.1"
+  API_URL="${AZURE_ORG_URL}/${AZURE_PROJECT}/_apis/wit/workitems/$AZURE_ID?api-version=7.0"
   RESPONSE=$(curl -s -u ":${AZURE_PAT}" "$API_URL")
+  # echo "$RESPONSE"
 
   # Check for error in Azure DevOps response
   if echo "$RESPONSE" | jq -e .error > /dev/null; then

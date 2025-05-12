@@ -25,11 +25,7 @@ jobs:
             exit 1
           fi
           
-<<<<<<< HEAD
           AZURE_ID=$(echo "${{ env.PR_BODY }}" | grep -oE 'AB#[0-9]+' | cut -d'#' -f2)
-=======
-          AZURE_ID=$(echo "${{ env.PR_BODY }}" | grep -oE '${{ env.AZURE_REGEX }}' | cut -d'#' -f2)
->>>>>>> 5faf9768d41f2fc75717879a5cae606f989fa901
 
           API_URL="${{ env.AZURE_ORG_URL }}/${{ env.AZURE_PROJECT }}/_apis/wit/workitems/$AZURE_ID?api-version=7.1"
           RESPONSE=$(curl -s -u ":${{ env.AZURE_PAT }}" "$API_URL")
