@@ -1,4 +1,4 @@
-name: Validate2
+name: Validate Wrike or Azure link(s) in PR Body and its type
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - release/**
       - feature/**
 jobs:
-  check_url:
+  check_presence_of_url_and_its_type:
     env:
       WRIKE_REGEX: "\\(https:\\|\\)//\\(www\\.\\|\\)wrike\\.com/open.htm?id=[[:digit:]]\\+"
       AZURE_REGEX: "AB#[[:digit:]]\\+"
