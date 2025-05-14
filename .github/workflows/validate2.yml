@@ -1,4 +1,4 @@
-name: Validate2
+name: Validate Wrike or Azure link(s) in PR Body and its type
 
 on:
   pull_request:
